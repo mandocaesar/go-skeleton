@@ -1,0 +1,15 @@
+syntax="proto3";
+
+package authentication;
+
+message Response {
+    string message = 1;
+}
+
+message Request {
+    string message = 1;
+}
+
+service Service {
+    rpc Authentication (Request) returns (Response) {}
+}

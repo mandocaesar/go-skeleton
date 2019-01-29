@@ -1,0 +1,8 @@
+syntax="proto3";
+
+package authentication;
+
+message Person {
+        string name = 1;
+        int32 age = 2;
+}
