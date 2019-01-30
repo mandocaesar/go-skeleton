@@ -1,6 +1,7 @@
-package monitor
+package utility
 
 import (
+	"errors"
 	"net/http"
 	"time"
 
@@ -24,8 +25,8 @@ func (h *HealthService) Register() (http.Handler, error) {
 		Timeout:   time.Second * 5,
 		SkipOnErr: true,
 		Check: func() error {
-
-		}
+			return errors.New("saya error mas, wik wik wik")
+		},
 	})
 
 	return health.Handler(), nil
