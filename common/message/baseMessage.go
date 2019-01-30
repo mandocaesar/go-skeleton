@@ -1,4 +1,4 @@
-package base
+package common
 
 //BaseMessage base message sturcture
 type BaseMessage struct {
