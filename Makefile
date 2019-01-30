@@ -6,3 +6,7 @@ generate-proto:
 		echo "processing" $$FILE; \
 		protoc --go_out=grpc:. $$FILE;\
 	done;
+
+add-package:
+	@echo "Adding Package";\
+	dep ensure -add $(name);\
