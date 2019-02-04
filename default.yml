@@ -1,0 +1,8 @@
+server:
+  mode: "debug"         # possible value: debug, test and release
+  addr: ":8080"         # listen address and port
+  shutdownTimeout: 5    # shutdown timeout duration in second
+
+database:
+  dbType: "mysql"       # possible value: mssql, mysql, postgres and sqlite 
+  connectionUri: "root:root@tcp(159.65.136.80:3309)/test?tls=skip-verify&autocommit=true&parseTime=true"
