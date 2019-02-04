@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
@@ -10,12 +11,14 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-skeleton/config"
+	_grpc "github.com/go-skeleton/grpc"
 	"github.com/go-skeleton/rest"
 )
 
 var (
 	configuration config.Configuration
 	engine        *gin.Engine
+	grpcEngine    *_grpc.Server
 	migrate       bool
 	seed          bool
 )
@@ -33,6 +36,10 @@ func init() {
 	configuration := *cfg
 	instance := rest.NewRouter(&configuration)
 	engine = instance.SetupRouter()
+	grpcEngine, err = _grpc.New()
+	if err != nil {
+		panic(fmt.Errorf("error instantiate grpc , reasson: %s", err))
+	}
 }
 
 func main() {
@@ -48,6 +55,15 @@ func main() {
 		}
 	}()
 
+	go func() {
+		// create a listener on TCP port 7777
+		lis, err := net.Listen("tcp", fmt.Sprintf(":%d", 7777))
+		if err != nil {
+			fmt.Println("failed to listen: %v", err)
+		}
+		grpcEngine.Instance.Serve(lis)
+	}()
+
 	quit := make(chan os.Signal)
 	signal.Notify(quit, os.Interrupt)
 	<-quit
@@ -61,6 +77,7 @@ func main() {
 	if err := server.Shutdown(ctx); err != nil {
 		fmt.Printf("Failed to shut down server gracefully: %s", err)
 	}
+	grpcEngine.Instance.GracefulStop()
 	fmt.Printf("Server shutted down")
 
 }
