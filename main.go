@@ -19,6 +19,7 @@ var (
 	configuration config.Configuration
 	engine        *gin.Engine
 	grpcEngine    *_grpc.Server
+	httpServer    *http.Server
 	migrate       bool
 	seed          bool
 )
@@ -42,15 +43,15 @@ func init() {
 	}
 }
 
-func main() {
+func ChainProcess() {
 	gin.SetMode(configuration.Server.Mode)
-	server := &http.Server{
+	httpServer := &http.Server{
 		Addr:    configuration.Server.Addr,
 		Handler: engine,
 	}
 
 	go func() {
-		if err := server.ListenAndServe(); err != nil {
+		if err := httpServer.ListenAndServe(); err != nil {
 			panic(fmt.Errorf("Fatal error failed to start rest-api server, reason : %s", err))
 		}
 	}()
@@ -59,11 +60,13 @@ func main() {
 		// create a listener on TCP port 7777
 		lis, err := net.Listen("tcp", fmt.Sprintf(":%d", 7777))
 		if err != nil {
-			fmt.Println("failed to listen: %v", err)
+			fmt.Printf("failed to listen: %v", err)
 		}
 		grpcEngine.Instance.Serve(lis)
 	}()
+}
 
+func GracefullyShutdown() {
 	quit := make(chan os.Signal)
 	signal.Notify(quit, os.Interrupt)
 	<-quit
@@ -74,10 +77,14 @@ func main() {
 	duration := time.Duration(configuration.Server.ShutdownTimeout) * time.Second
 	ctx, cancel := context.WithTimeout(context.Background(), duration)
 	defer cancel()
-	if err := server.Shutdown(ctx); err != nil {
+	if err := httpServer.Shutdown(ctx); err != nil {
 		fmt.Printf("Failed to shut down server gracefully: %s", err)
 	}
 	grpcEngine.Instance.GracefulStop()
 	fmt.Printf("Server shutted down")
+}
 
+func main() {
+	ChainProcess()
+	GracefullyShutdown()
 }
