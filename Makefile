@@ -10,3 +10,9 @@ generate-proto:
 add-package:
 	@echo "Adding Package";\
 	dep ensure -add $(name);\
+
+run-api:
+	@echo "Run API"
+
+run-grpc:
+	@echo "Run GRPC"
