@@ -82,10 +82,7 @@ func ChainProcess() {
 		fmt.Println("starting GRPC server")
 		grpcEngine.Instance.Serve(lis)
 	}()
-}
 
-//GracefullyShutdown : shutdown process gracefully
-func GracefullyShutdown() {
 	quit := make(chan os.Signal)
 	signal.Notify(quit, os.Interrupt)
 	<-quit
@@ -107,5 +104,4 @@ func GracefullyShutdown() {
 
 func main() {
 	ChainProcess()
-	GracefullyShutdown()
 }
