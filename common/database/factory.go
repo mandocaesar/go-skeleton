@@ -6,7 +6,6 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/mandocaesar/go-skeleton/config"
 	"github.com/sirupsen/logrus"
-	"visualstudio.com/Locum-app/Config"
 )
 
 //Factory : database struct form db factory
@@ -16,7 +15,7 @@ type Factory struct {
 }
 
 //NewDbFactory : function to generate new database factory
-func NewDbFactory(cfg *Config.Configuration, logger *logrus.Logger) (*Factory, error) {
+func NewDbFactory(cfg *config.Configuration, logger *logrus.Logger) (*Factory, error) {
 	if cfg == nil {
 		return nil, errors.New("Error Intantiate new db instance, config is null")
 	}
