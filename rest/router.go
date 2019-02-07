@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/go-skeleton/config"
+	"github.com/mandocaesar/go-skeleton/config"
 )
 
 //Router : Instance struct for router model

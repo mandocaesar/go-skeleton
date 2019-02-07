@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-skeleton/config"
+	"github.com/mandocaesar/go-skeleton/config"
 )
 
 //Server : Rest-API server structure

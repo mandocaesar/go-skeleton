@@ -10,9 +10,9 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"./config"
-	_grpc "./grpc"
-	"./rest"
+	"github.com/mandocaesar/go-skeleton/config"
+	_grpc "github.com/mandocaesar/go-skeleton/grpc"
+	"github.com/mandocaesar/go-skeleton/rest"
 )
 
 var (
