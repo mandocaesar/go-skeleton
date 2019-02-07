@@ -10,9 +10,9 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-skeleton/config"
-	_grpc "github.com/go-skeleton/grpc"
-	"github.com/go-skeleton/rest"
+	"./config"
+	_grpc "./grpc"
+	"./rest"
 )
 
 var (
