@@ -4,25 +4,28 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/mandocaesar/go-skeleton/common/utility"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/go-skeleton/config"
+	"github.com/mandocaesar/go-skeleton/config"
 )
 
 //Router : Instance struct for router model
 type Router struct {
 	config *config.Configuration
+	log    *utility.Log
 }
 
 //NewRouter : Instantiate new Router
-func NewRouter(configuration *config.Configuration) *Router {
-	return &Router{config: configuration}
+func NewRouter(configuration *config.Configuration, log *utility.Log) *Router {
+	return &Router{config: configuration, log: log}
 }
 
 //SetupRouter : register end point
 func (r *Router) SetupRouter() *gin.Engine {
 	router := gin.New()
-
+	r.log.LogInfo("starting gin")
 	//middleware setup
 	//duration := time.Duration(5) * time.Second
 

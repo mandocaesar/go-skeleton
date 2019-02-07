@@ -9,10 +9,12 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/mandocaesar/go-skeleton/common/utility"
+
 	"github.com/gin-gonic/gin"
-	"github.com/go-skeleton/config"
-	_grpc "github.com/go-skeleton/grpc"
-	"github.com/go-skeleton/rest"
+	"github.com/mandocaesar/go-skeleton/config"
+	_grpc "github.com/mandocaesar/go-skeleton/grpc"
+	"github.com/mandocaesar/go-skeleton/rest"
 )
 
 var (
@@ -22,6 +24,7 @@ var (
 	httpServer    *http.Server
 	migrate       bool
 	seed          bool
+	log           *utility.Log
 )
 
 func init() {
@@ -29,20 +32,33 @@ func init() {
 	// flag.BoolVar(&seed, "migrate", false, "run db seeder")
 	// flag.Parse()
 
+	//setup configuration
 	cfg, err := config.New("./")
 	if err != nil {
 		panic(fmt.Errorf("error parse configuration, reason: %s", err))
 	}
 
 	configuration := *cfg
-	instance := rest.NewRouter(&configuration)
+
+	//setup logger
+	_log, err := utility.NewLogger()
+	if err != nil {
+		panic(fmt.Errorf("error initilize log, reason: %s", err))
+	}
+	log = _log
+	//setup REST-API
+	instance := rest.NewRouter(&configuration, log)
 	engine = instance.SetupRouter()
+
+	//setup GRPC
 	grpcEngine, err = _grpc.New()
 	if err != nil {
 		panic(fmt.Errorf("error instantiate grpc , reasson: %s", err))
 	}
+
 }
 
+//ChainProcess : chainning process
 func ChainProcess() {
 	gin.SetMode(configuration.Server.Mode)
 	httpServer := &http.Server{
@@ -62,10 +78,12 @@ func ChainProcess() {
 		if err != nil {
 			fmt.Printf("failed to listen: %v", err)
 		}
+		fmt.Println("starting GRPC server")
 		grpcEngine.Instance.Serve(lis)
 	}()
 }
 
+//GracefullyShutdown : shutdown process gracefully
 func GracefullyShutdown() {
 	quit := make(chan os.Signal)
 	signal.Notify(quit, os.Interrupt)
@@ -77,9 +95,11 @@ func GracefullyShutdown() {
 	duration := time.Duration(configuration.Server.ShutdownTimeout) * time.Second
 	ctx, cancel := context.WithTimeout(context.Background(), duration)
 	defer cancel()
+
 	if err := httpServer.Shutdown(ctx); err != nil {
 		fmt.Printf("Failed to shut down server gracefully: %s", err)
 	}
+
 	grpcEngine.Instance.GracefulStop()
 	fmt.Printf("Server shutted down")
 }

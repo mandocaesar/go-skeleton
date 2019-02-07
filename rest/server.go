@@ -5,7 +5,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-skeleton/config"
+	"github.com/mandocaesar/go-skeleton/common/utility"
+	"github.com/mandocaesar/go-skeleton/config"
 )
 
 //Server : Rest-API server structure
@@ -16,11 +17,11 @@ type Server struct {
 }
 
 //New : Rest-API instantiate
-func New(config config.Configuration) (*Server, error) {
+func New(config config.Configuration, logger *utility.Log) (*Server, error) {
 	_engine := &http.Server{
 		Addr: "8080",
 	}
-	_router := NewRouter(&config)
+	_router := NewRouter(&config, logger)
 
 	return &Server{cfg: config, engine: _engine, router: _router}, nil
 }
