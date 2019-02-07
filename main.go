@@ -46,6 +46,7 @@ func init() {
 		panic(fmt.Errorf("error initilize log, reason: %s", err))
 	}
 	log = _log
+
 	//setup REST-API
 	instance := rest.NewRouter(&configuration, log)
 	engine = instance.SetupRouter()
