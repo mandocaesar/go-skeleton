@@ -8,6 +8,7 @@ import (
 type Configuration struct {
 	Database Database
 	Server   Server
+	Loggly   Loggly
 }
 
 //New : instantiate Configuration

@@ -9,4 +9,5 @@ type Server struct {
 	ShutdownTimeout int
 	BaseURL         string
 	ClientURL       string
+	Name            string
 }
