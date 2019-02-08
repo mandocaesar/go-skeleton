@@ -1,7 +1,7 @@
 package utility
 
 import (
-	"github.com/Sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 )
 
 //Log : struct for logger DI

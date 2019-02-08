@@ -3,9 +3,9 @@ package database
 import (
 	"errors"
 
-	"github.com/Sirupsen/logrus"
 	"github.com/jinzhu/gorm"
 	"github.com/mandocaesar/go-skeleton/config"
+	"github.com/sirupsen/logrus"
 )
 
 //Factory : database struct form db factory
