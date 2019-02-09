@@ -4,6 +4,6 @@ package config
 type Loggly struct {
 	Token string
 	Host  string
-	Level int32
+	Level string
 	Tags  []string
 }

@@ -41,7 +41,7 @@ func init() {
 	configuration := *cfg
 
 	//setup logger
-	_log, err := utility.NewLogger()
+	_log, err := utility.NewLogger(configuration)
 	if err != nil {
 		panic(fmt.Errorf("error initilize log, reason: %s", err))
 	}

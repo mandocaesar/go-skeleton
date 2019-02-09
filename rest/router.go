@@ -9,6 +9,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/mandocaesar/go-skeleton/config"
+	"go.elastic.co/apm/module/apmgin"
 )
 
 //Router : Instance struct for router model
@@ -28,6 +29,8 @@ func (r *Router) SetupRouter() *gin.Engine {
 	r.log.LogInfo("starting gin")
 	//middleware setup
 	//duration := time.Duration(5) * time.Second
+
+	router.Use(apmgin.Middleware(router))
 
 	router.Use(cors.New(cors.Config{
 		AllowAllOrigins:  true,

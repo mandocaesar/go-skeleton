@@ -1,9 +1,12 @@
 package utility
 
 import (
+	"net/http"
+
 	"github.com/mandocaesar/go-skeleton/config"
 	"github.com/sebest/logrusly"
 	"github.com/sirupsen/logrus"
+	"go.elastic.co/apm/module/apmlogrus"
 )
 
 //Log : struct for logger DI
@@ -20,8 +23,9 @@ func NewLogger(cfg config.Configuration) (*Log, error) {
 		"service": "Inem",
 		"version": "0.1",
 	})
-	hook := logrusly.NewLogglyHook(config.Token, config.Host, logrus.WarnLevel, config.Tags...)
+	hook := logrusly.NewLogglyHook(config.Token, config.Host, logrus.InfoLevel, config.Tags...)
 	log.Hooks.Add(hook)
+	log.Hooks.Add(&apmlogrus.Hook{})
 
 	return &Log{logger: log}, nil
 }
@@ -34,4 +38,9 @@ func (l *Log) LogInfo(data interface{}) {
 //LogError : log as error
 func (l *Log) LogError(data interface{}) {
 	l.logger.Info(data)
+}
+
+func handleRequest(w http.ResponseWriter, req *http.Request) {
+	traceContextFields := apmlogrus.TraceContext(req.Context())
+	logrus.WithFields(traceContextFields).Debug("handling request")
 }
