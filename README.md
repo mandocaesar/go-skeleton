@@ -1,14 +1,11 @@
-## GO-SKELETON ##
+# go-skeleton
 
-GOLANG skeleton project    [![CircleCI](https://circleci.com/gh/mandocaesar/go-skeleton.svg?style=svg)](https://circleci.com/gh/mandocaesar/go-skeleton) 
+> Skeleton for Golang projects complete with database layer, gRPC, logging, and more.
 
-### USAGE ###
-1. Clone this repository
-2. Rename package root folder according to your project
-3. Run dep ensure to download all library dependency, if you haven't install dep please follow the instruction on this link : https://github.com/golang/dep
+[![CircleCI](https://badgen.net/circleci/github/mandocaesar/go-skeleton)](https://circleci.com/gh/mandocaesar/go-skeleton)
 
+## What's in the project
 
-### ROAD MAP : ###
 - [ ] gRPC
 - [x] Rest API
 - [ ] Messaging (Rabbit MQ)
@@ -20,3 +17,40 @@ GOLANG skeleton project    [![CircleCI](https://circleci.com/gh/mandocaesar/go-s
 - [ ] Generic Logging - fan out multiple channel
 - [ ] APM integration
 - [ ] Example Project
+
+## Prerequisites
+
+- [Go](https://golang.org/) (1.11.5+)
+- [dep](https://golang.github.io/dep/) (0.5.0+)
+
+## Getting started
+
+To use this started, clone this repository and rename the project directory to your liking.
+
+```bash
+$ git clone https://github.com/mandocaesar/go-skeleton.git <your-project-name>
+```
+
+Next, `cd` into the project folder and install the required dependencies.
+
+```bash
+go get
+
+# ...or, if you use dep:
+dep ensure
+```
+
+You're ready to go!
+
+## Commands
+
+```bash
+# builds a production copy of the project
+go build
+
+# TODO: add more commands
+```
+
+## License
+
+[MIT](LICENSE).
