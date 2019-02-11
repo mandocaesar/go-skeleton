@@ -51,7 +51,7 @@ func (r *Router) SetupRouter() *gin.Engine {
 	router := gin.New()
 	r.log.LogInfo("starting gin")
 
-	//middleware setup
+	//Middleware Setup
 
 	//APM-gin configuration
 	router.Use(apmgin.Middleware(router))

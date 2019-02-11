@@ -39,6 +39,7 @@ func (c *Controller) Login(ctx *gin.Context) {
 		} else {
 			errors = append(errors, err.Error())
 		}
+
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"success": false, "errors": errors})
 		return
 	}
