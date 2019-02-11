@@ -23,5 +23,5 @@ jobs:
 
       # specify any bash command here prefixed with `run: `
       - run: export GO111MODULE=on && go mod tidy
-      - run: export GO111MODULE=on && go build
-      - run: export GO111MODULE=on && go test -v ./...
+      - run: source .env && go build
+      - run: go test -v ./...
