@@ -27,11 +27,14 @@ func NewRouter(configuration *config.Configuration, log *utility.Log) *Router {
 func (r *Router) SetupRouter() *gin.Engine {
 	router := gin.New()
 	r.log.LogInfo("starting gin")
-	//middleware setup
-	//duration := time.Duration(5) * time.Second
 
+	//middleware setup
+
+	//APM-gin configuration
 	router.Use(apmgin.Middleware(router))
 
+	//CORS-gin configuration
+	//TODO : move to yml config
 	router.Use(cors.New(cors.Config{
 		AllowAllOrigins:  true,
 		AllowMethods:     []string{"PUT", "PATCH", "GET", "POST", "DELETE"},

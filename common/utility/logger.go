@@ -20,9 +20,10 @@ func NewLogger(cfg config.Configuration) (*Log, error) {
 	config := cfg.Loggly
 
 	log.WithFields(logrus.Fields{
-		"service": "Inem",
-		"version": "0.1",
+		"service": cfg.Server.Name,
+		"version": cfg.Server.Version,
 	})
+
 	hook := logrusly.NewLogglyHook(config.Token, config.Host, logrus.InfoLevel, config.Tags...)
 	log.Hooks.Add(hook)
 	log.Hooks.Add(&apmlogrus.Hook{})

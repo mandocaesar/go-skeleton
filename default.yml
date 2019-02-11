@@ -2,7 +2,8 @@ server:
   mode: "debug"         # possible value: debug, test and release
   addr: ":8080"         # listen address and port
   shutdownTimeout: 5    # shutdown timeout duration in second
-  name: "Inem"
+  name: "Inem"          # service name
+  version: "1.0.1"      # service version
 
 database:
   dbType: "mysql"       # possible value: mssql, mysql, postgres and sqlite 

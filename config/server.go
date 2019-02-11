@@ -10,4 +10,5 @@ type Server struct {
 	BaseURL         string
 	ClientURL       string
 	Name            string
+	Version         string
 }
