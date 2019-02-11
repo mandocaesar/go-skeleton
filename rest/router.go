@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/mandocaesar/go-skeleton/common/database"
+	"go.elastic.co/apm/module/apmgin"
 
 	"github.com/jinzhu/gorm"
 	"github.com/mandocaesar/go-skeleton/common/utility"
@@ -26,16 +26,7 @@ type Router struct {
 }
 
 //NewRouter : Instantiate new Router
-func NewRouter(configuration *config.Configuration, log *utility.Log) (*Router, error) {
-	_factory, err := database.NewDbFactory(configuration)
-	if err != nil {
-		return nil, errors.New(err.Error())
-	}
-
-	_db, err := _factory.DBConnection()
-	if err != nil {
-		return nil, errors.New(err.Error())
-	}
+func NewRouter(configuration *config.Configuration, log *utility.Log, _db *gorm.DB) (*Router, error) {
 
 	_authService, err := authentication.NewService(_db)
 	if err != nil {
@@ -63,7 +54,7 @@ func (r *Router) SetupRouter() *gin.Engine {
 	//middleware setup
 
 	//APM-gin configuration
-	//router.Use(apmgin.Middleware(router))
+	router.Use(apmgin.Middleware(router))
 
 	//CORS-gin configuration
 	//TODO : move to yml config

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"net"
 	"net/http"
@@ -9,6 +10,7 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/mandocaesar/go-skeleton/common/database"
 	"github.com/mandocaesar/go-skeleton/common/utility"
 
 	"github.com/gin-gonic/gin"
@@ -28,9 +30,9 @@ var (
 )
 
 func init() {
-	// flag.BoolVar(&migrate, "migrate", false, "run db migration")
-	// flag.BoolVar(&seed, "migrate", false, "run db seeder")
-	// flag.Parse()
+	flag.BoolVar(&migrate, "migrate", false, "run db migration")
+	flag.BoolVar(&seed, "seed", false, "run db seeder")
+	flag.Parse()
 
 	//setup configuration
 	cfg, err := config.New("./")
@@ -47,8 +49,26 @@ func init() {
 	}
 	log = _log
 
+	_factory, err := database.NewDbFactory(configuration)
+	if err != nil {
+		panic(fmt.Errorf("error initilize DB Factory, reason: %s", err))
+	}
+
+	_db, err := _factory.DBConnection()
+	if err != nil {
+		panic(fmt.Errorf("error initilize DB, reason: %s", err))
+	}
+
+	if migrate {
+		database.Migrate(_db)
+	}
+
+	if seed {
+		database.Seed(_db)
+	}
+
 	//setup REST-API
-	instance, err := rest.NewRouter(configuration, log)
+	instance, err := rest.NewRouter(configuration, log, _db)
 	if err != nil {
 		panic(fmt.Errorf("error initilize log, reason: %s", err))
 	}
