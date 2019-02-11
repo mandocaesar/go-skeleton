@@ -1,6 +1,5 @@
 module github.com/mandocaesar/go-skeleton
-require github.com/mandocaesar/go-skeleton/domain/authentication v0.0.0
-replace github.com/mandocaesar/go-skeleton/domain/authentication => ./domain/authentication/
+
 require (
 	github.com/gin-contrib/cors v0.0.0-20190101123304-5e7acb10687f
 	github.com/gin-contrib/sse v0.0.0-20190125020943-a7658810eb74 // indirect
