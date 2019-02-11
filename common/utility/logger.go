@@ -12,23 +12,24 @@ import (
 //Log : struct for logger DI
 type Log struct {
 	logger *logrus.Logger
+	config *config.Configuration
 }
 
 //NewLogger : instantiate new logger
-func NewLogger(cfg config.Configuration) (*Log, error) {
-	log := logrus.New()
-	config := cfg.Loggly
+func NewLogger(cfg *config.Configuration) (*Log, error) {
+	_log := logrus.New()
+	_config := cfg
 
-	log.WithFields(logrus.Fields{
+	_log.WithFields(logrus.Fields{
 		"service": cfg.Server.Name,
 		"version": cfg.Server.Version,
 	})
 
-	hook := logrusly.NewLogglyHook(config.Token, config.Host, logrus.InfoLevel, config.Tags...)
-	log.Hooks.Add(hook)
-	log.Hooks.Add(&apmlogrus.Hook{})
+	hook := logrusly.NewLogglyHook(_config.Loggly.Token, _config.Loggly.Host, logrus.InfoLevel, _config.Loggly.Tags...)
+	_log.Hooks.Add(hook)
+	_log.Hooks.Add(&apmlogrus.Hook{})
 
-	return &Log{logger: log}, nil
+	return &Log{logger: _log, config: _config}, nil
 }
 
 //LogInfo : log as info

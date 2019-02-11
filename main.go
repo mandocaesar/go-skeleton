@@ -18,7 +18,7 @@ import (
 )
 
 var (
-	configuration config.Configuration
+	configuration *config.Configuration
 	engine        *gin.Engine
 	grpcEngine    *_grpc.Server
 	httpServer    *http.Server
@@ -38,7 +38,7 @@ func init() {
 		panic(fmt.Errorf("error parse configuration, reason: %s", err))
 	}
 
-	configuration := *cfg
+	configuration := cfg
 
 	//setup logger
 	_log, err := utility.NewLogger(configuration)
@@ -48,7 +48,10 @@ func init() {
 	log = _log
 
 	//setup REST-API
-	instance := rest.NewRouter(&configuration, log)
+	instance, err := rest.NewRouter(configuration, log)
+	if err != nil {
+		panic(fmt.Errorf("error initilize log, reason: %s", err))
+	}
 	engine = instance.SetupRouter()
 
 	//setup GRPC
@@ -56,18 +59,20 @@ func init() {
 	if err != nil {
 		panic(fmt.Errorf("error instantiate grpc , reasson: %s", err))
 	}
-
+	ChainProcess(configuration)
 }
 
 //ChainProcess : chainning process
-func ChainProcess() {
+func ChainProcess(configuration *config.Configuration) {
 	gin.SetMode(configuration.Server.Mode)
+	fmt.Println(configuration.Server.Addr)
 	httpServer := &http.Server{
 		Addr:    configuration.Server.Addr,
 		Handler: engine,
 	}
 
 	go func() {
+		fmt.Printf("Running http service on %s", configuration.Server.Addr)
 		if err := httpServer.ListenAndServe(); err != nil {
 			panic(fmt.Errorf("Fatal error failed to start rest-api server, reason : %s", err))
 		}
@@ -103,5 +108,5 @@ func ChainProcess() {
 }
 
 func main() {
-	ChainProcess()
+
 }

@@ -7,7 +7,7 @@ server:
 
 database:
   dbType: "mysql"       # possible value: mssql, mysql, postgres and sqlite 
-  connectionUri: "root:root@tcp(159.65.136.80:3309)/test?tls=skip-verify&autocommit=true&parseTime=true"
+  connectionUri: "root:root@tcp(localhost:3306)/test?tls=skip-verify&autocommit=true&parseTime=true"
 
 loggly:
   token: ""  # loggly token

@@ -19,9 +19,12 @@ type Server struct {
 //New : Rest-API instantiate
 func New(config config.Configuration, logger *utility.Log) (*Server, error) {
 	_engine := &http.Server{
-		Addr: "8080",
+		Addr: config.Server.Addr,
 	}
-	_router := NewRouter(&config, logger)
+	_router, err := NewRouter(&config, logger)
+	if err != nil {
+		return nil, err
+	}
 
 	return &Server{cfg: config, engine: _engine, router: _router}, nil
 }

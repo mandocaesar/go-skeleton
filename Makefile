@@ -9,6 +9,9 @@ generate-proto:
 
 add-package:
 	@echo "Adding Package";\
-	dep ensure -add $(name);\
+	go get -u  $(name);\
 
-
+run:
+	@echo "RUN SERVICE";\
+	source .env;\
+	go run main.go;\

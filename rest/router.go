@@ -1,26 +1,58 @@
 package rest
 
 import (
+	"errors"
 	"net/http"
 	"time"
 
+	"github.com/mandocaesar/go-skeleton/common/database"
+
+	"github.com/jinzhu/gorm"
 	"github.com/mandocaesar/go-skeleton/common/utility"
+	"github.com/mandocaesar/go-skeleton/domain/authentication"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/mandocaesar/go-skeleton/config"
-	"go.elastic.co/apm/module/apmgin"
 )
 
 //Router : Instance struct for router model
 type Router struct {
-	config *config.Configuration
-	log    *utility.Log
+	config         *config.Configuration
+	log            *utility.Log
+	db             *gorm.DB
+	authController *authentication.Controller
+	authService    *authentication.Service
 }
 
 //NewRouter : Instantiate new Router
-func NewRouter(configuration *config.Configuration, log *utility.Log) *Router {
-	return &Router{config: configuration, log: log}
+func NewRouter(configuration *config.Configuration, log *utility.Log) (*Router, error) {
+	_factory, err := database.NewDbFactory(configuration)
+	if err != nil {
+		return nil, errors.New(err.Error())
+	}
+
+	_db, err := _factory.DBConnection()
+	if err != nil {
+		return nil, errors.New(err.Error())
+	}
+
+	_authService, err := authentication.NewService(_db)
+	if err != nil {
+		return nil, errors.New(err.Error())
+	}
+
+	_authController, err := authentication.NewController(_authService)
+	if err != nil {
+		return nil, errors.New(err.Error())
+	}
+
+	return &Router{
+		config:         configuration,
+		log:            log,
+		authController: _authController,
+		authService:    _authService,
+	}, nil
 }
 
 //SetupRouter : register end point
@@ -31,7 +63,7 @@ func (r *Router) SetupRouter() *gin.Engine {
 	//middleware setup
 
 	//APM-gin configuration
-	router.Use(apmgin.Middleware(router))
+	//router.Use(apmgin.Middleware(router))
 
 	//CORS-gin configuration
 	//TODO : move to yml config
@@ -55,6 +87,11 @@ func (r *Router) SetupRouter() *gin.Engine {
 					"version":    "0.1",
 				})
 			})
+		}
+
+		authentication := v1.Group("authentication")
+		{
+			authentication.POST("/", r.authController.Login)
 		}
 	}
 

@@ -4,18 +4,20 @@ import (
 	"errors"
 
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/mandocaesar/go-skeleton/config"
-	"github.com/sirupsen/logrus"
+	//  "github.com/jinzhu/gorm/dialects/postgres"
+	//  "github.com/jinzhu/gorm/dialects/sqlite"
+	// "github.com/jinzhu/gorm/dialects/mssql"
 )
 
 //Factory : database struct form db factory
 type Factory struct {
 	config config.Configuration
-	log    *logrus.Logger
 }
 
 //NewDbFactory : function to generate new database factory
-func NewDbFactory(cfg *config.Configuration, logger *logrus.Logger) (*Factory, error) {
+func NewDbFactory(cfg *config.Configuration) (*Factory, error) {
 	if cfg == nil {
 		return nil, errors.New("Error Intantiate new db instance, config is null")
 	}
