@@ -24,6 +24,7 @@ require (
 	go.elastic.co/apm/module/apmlogrus v1.2.0
 	google.golang.org/grpc v1.18.0
 	gopkg.in/go-playground/validator.v8 v8.18.2
+	github.com/mandocaesar/go-skeleton v0.0.0-20190211144949-d94c5a9736a7
 )
 
-replace github.com/mandocaesar/go-skeleton v0.0.0-20190211144435-591c4e068b45 => ./
+replace github.com/mandocaesar/go-skeleton v0.0.0-20190211144949-d94c5a9736a7 => ./...
