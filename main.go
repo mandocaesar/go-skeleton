@@ -29,7 +29,7 @@ var (
 	log           *utility.Log
 )
 
-func init() {
+func main() {
 	flag.BoolVar(&migrate, "migrate", false, "run db migration")
 	flag.BoolVar(&seed, "seed", false, "run db seeder")
 	flag.Parse()
@@ -79,11 +79,7 @@ func init() {
 	if err != nil {
 		panic(fmt.Errorf("error instantiate grpc , reasson: %s", err))
 	}
-	ChainProcess(configuration)
-}
 
-//ChainProcess : chainning process
-func ChainProcess(configuration *config.Configuration) {
 	gin.SetMode(configuration.Server.Mode)
 	fmt.Println(configuration.Server.Addr)
 	httpServer := &http.Server{
@@ -92,7 +88,7 @@ func ChainProcess(configuration *config.Configuration) {
 	}
 
 	go func() {
-		fmt.Printf("Running http service on %s", configuration.Server.Addr)
+		fmt.Printf("Running http service on %s \n", configuration.Server.Addr)
 		if err := httpServer.ListenAndServe(); err != nil {
 			panic(fmt.Errorf("Fatal error failed to start rest-api server, reason : %s", err))
 		}
@@ -125,8 +121,4 @@ func ChainProcess(configuration *config.Configuration) {
 
 	grpcEngine.Instance.GracefulStop()
 	fmt.Printf("Server shutted down")
-}
-
-func main() {
-
 }
